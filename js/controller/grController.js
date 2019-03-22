@@ -4,7 +4,7 @@ angular.module("groceryAppModule", [])
 .controller('tutorialCtrl', function($scope) {
   $scope.myObject = [];
   $scope.myObject.title = "First Title";
-  $scope.myObjectsubtitle = "Sub title";
+  $scope.myObject.subtitle = "Sub title";
 
 })
 
