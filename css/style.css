@@ -1,0 +1,7 @@
+.strike ::after {
+  position: relative;
+}
+
+.strike {
+  text-decoration: line-through;
+}
