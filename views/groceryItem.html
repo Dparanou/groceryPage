@@ -1,0 +1,14 @@
+
+<button type="button" class="btn btn-sm btn-success pull-left" ng-click="checked(item)">
+  <i class="far"  ng-class="item.completed ? 'fa-check-square' : 'fa-square'"></i>
+</button>
+
+<span ng-class="{strike: item.completed}" style="font-weight: bold">{{item.itemName | uppercase}}</span>
+
+<a href="#/addItem/edit/{{item.id}}" class="btn btn-sm btn-default pull-right">
+  <i class="fas fa-pencil-alt"></i>
+</a>
+
+<button class="btn btn-sm btn-danger pull-right" ng-click="removeItem(item)">
+  <i class="far fa-trash-alt"></i>
+</button>
