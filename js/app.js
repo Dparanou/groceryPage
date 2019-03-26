@@ -31,13 +31,13 @@ app.service("GroceryService", function($http) {
 
   $http({
     method: 'GET',
-    url: 'server_data.json'
+    url: 'data/server_data.json'
   }).then(function(response) {
       groceryService.groceryItems = response.data;
 
       for(var x in groceryService.groceryItems) {
         groceryService.groceryItems[x].date = new Date(groceryService.groceryItems[x].date);
-        console.log(groceryService.groceryItems[x].date.toString());
+        //console.log(groceryService.groceryItems[x].date.toString());
       }
     }, function(error, data, status) {
       alert("Things went wrong");
@@ -69,20 +69,60 @@ app.service("GroceryService", function($http) {
     var updatedItem = groceryService.findById(entry.id);
 
     if(updatedItem) {
-      updatedItem.completed = entry.completed;
-      updatedItem.itemName = entry.itemName;
-      updatedItem.date = entry.date;
+
+      $http({
+        method: 'POST',
+        url:'data/updated_item.json',
+        params: entry
+      }).then(function(response) {
+          if(response.data.status == 1) {
+            console.log(response.data.status );
+            updatedItem.completed = entry.completed;
+            updatedItem.itemName = entry.itemName;
+            updatedItem.date = entry.date;
+          }
+      }, function(error, data) {
+        alert("Problemm!");
+      }
+    );
     }
     else {
-      entry.id = groceryService.getNewId();
+
+      $http({
+        method: 'POST',
+        url:'data/added_item.json',
+        params: entry
+      }).then(function(response) {
+        entry.id = response.data.newId;
+        //console.log(response.data.newId);
+      }, function(error, data) {
+        alert("Problemm!");
+      }
+    );
+      // Client --> entry.id = groceryService.getNewId();
       groceryService.groceryItems.push(entry);
+      console.log(groceryService.groceryItems);
     }
   };
 
   groceryService.removeItem = function(entry) {
-    var index = groceryService.groceryItems.indexOf(entry);
 
-    groceryService.groceryItems.splice(index, 1);
+    $http({
+      method: 'POST',
+      url:'data/deleted_item.json',
+      params: {id: entry.id}
+    }).then(function(response) {
+      if(response.data.status) {
+        console.log(response.data.status);
+
+        var index = groceryService.groceryItems.indexOf(entry);
+        groceryService.groceryItems.splice(index, 1);
+      }
+
+    }, function(error, data) {
+      alert("Problemm!");
+    }
+  );
   };
 
   groceryService.checked = function(entry) {
