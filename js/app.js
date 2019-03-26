@@ -24,15 +24,25 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
   });
 }]);
 
-app.service("GroceryService", function() {
+app.service("GroceryService", function($http) {
   var groceryService = {};
 
-  groceryService.groceryItems= [
-    {id: 1, completed: false, itemName: "milk", date: new Date("April 2, 2019 11:12:00")},
-    {id: 2, completed: false, itemName: "butter", date: new Date("April 1, 2019 12:12:00")},
-    {id: 3, completed: false, itemName: "olive oil", date: new Date("April 2, 2019 20:12:00")},
-    {id: 4, completed: false, itemName: "chocolate", date: new Date("April 3, 2019 11:15:00")}
-  ];
+  groceryService.groceryItems= [];
+
+  $http({
+    method: 'GET',
+    url: 'server_data.json'
+  }).then(function(response) {
+      groceryService.groceryItems = response.data;
+
+      for(var x in groceryService.groceryItems) {
+        groceryService.groceryItems[x].date = new Date(groceryService.groceryItems[x].date);
+        console.log(groceryService.groceryItems[x].date.toString());
+      }
+    }, function(error, data, status) {
+      alert("Things went wrong");
+    });
+
 
   groceryService.findById = function (id) {
     for(var item in groceryService.groceryItems) {
@@ -85,7 +95,6 @@ app.service("GroceryService", function() {
 app.controller("homeCtrl",["$scope", "GroceryService", function($scope, GroceryService) {
 
   $scope.groceryItems = GroceryService.groceryItems;
-  console.log($scope.groceryItems);
 
   $scope.removeItem = function(entry) {
     GroceryService.removeItem(entry);
@@ -94,6 +103,10 @@ app.controller("homeCtrl",["$scope", "GroceryService", function($scope, GroceryS
   $scope.checked = function(entry) {
     GroceryService.checked(entry);
   };
+
+  $scope.$watch(function() { return GroceryService.groceryItems; }, function(groceryItems) {
+    $scope.groceryItems = groceryItems;
+  });
 
 }]);
 

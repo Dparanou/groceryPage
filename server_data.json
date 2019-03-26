@@ -1,0 +1,6 @@
+[
+  {"id": 1, "completed": false, "itemName": "milk", "date":  "2019-03-16T11:12:00Z"},
+  {"id": 2, "completed": false, "itemName": "butter", "date":  "2019-02-11T12:12:00Z"},
+  {"id": 3, "completed": false, "itemName": "olive oil", "date":  "2019-03-11T20:12:00Z"},
+  {"id": 4, "completed": false, "itemName": "chocolate", "date":  "2019-03-18T11:15:00Z"}
+]
