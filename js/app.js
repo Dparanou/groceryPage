@@ -53,6 +53,7 @@ app.service("GroceryService", function($http) {
   };
 
   groceryService.getNewId = function() {
+
     if(groceryService.newId) {
       groceryService.newId++;
       return groceryService.newId;
@@ -160,8 +161,17 @@ app.controller("groceryListCtrl", ["$scope","$routeParams", "$location", "Grocer
   }
 
   $scope.save = function() {
-    GroceryService.save( $scope.groceryItem );
-    $location.path("/");
+    var exist = false;
+    for(var item in GroceryService.groceryItems){
+      if(GroceryService.groceryItems[item].itemName.toUpperCase() === $scope.groceryItem.itemName.toUpperCase()) {
+        alert("Already exist!");
+        exist = true;
+      }
+    }
+    if(!exist) {
+      GroceryService.save( $scope.groceryItem );
+      $location.path("/");
+    }
   };
 
 }]);
